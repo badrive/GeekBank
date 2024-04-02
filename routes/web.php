@@ -11,6 +11,21 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+//bills
+Route::get('/bills', function () {
+    return view('bills');
+})->middleware(['auth', 'verified'])->name('bills');
+
+//crypto
+Route::get('/crypto', function () {
+    return view('crypto');
+})->middleware(['auth', 'verified'])->name('crypto');
+
+//invest
+Route::get('/invest', function () {
+    return view('invest');
+})->middleware(['auth', 'verified'])->name('invest');
+
 Route::get('/cards', function () {
     return view('cards');
 })->middleware(['auth', 'verified'])->name('cards');

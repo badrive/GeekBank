@@ -27,6 +27,8 @@
                         {{ __('transition') }}
                     </x-nav-link>
                 </div>
+
+                
             </div>
 
             <!-- Settings Dropdown -->
