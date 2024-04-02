@@ -17,14 +17,34 @@
                         {{ __('Dashboard') }}
                     </x-nav-link>
                 </div>
+
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('cards')" :active="request()->routeIs('cards')">
                         {{ __('cards') }}
                     </x-nav-link>
                 </div>
+
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('transition')" :active="request()->routeIs('transition')">
                         {{ __('transition') }}
+                    </x-nav-link>
+                </div>
+
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('bills')" :active="request()->routeIs('bills')">
+                        {{ __('Bills') }}
+                    </x-nav-link>
+                </div>
+
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('crypto')" :active="request()->routeIs('crypto')">
+                        {{ __('Crypto') }}
+                    </x-nav-link>
+                </div>
+
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('invest')" :active="request()->routeIs('invest')">
+                        {{ __('Invest') }}
                     </x-nav-link>
                 </div>
 
