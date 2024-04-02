@@ -16,11 +16,11 @@ return new class extends Migration
             $table->foreignId("user_id")->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->string("number");
             $table->string("code");
-            $table->date("date");
+            $table->timestamp("date");
             $table->string("rib");
-            $table->boolean("active");
-            $table->boolean("visibility");
-            $table->integer("balance");
+            $table->boolean("active")->default(true);
+            $table->boolean("visibility")->default(true);
+            $table->integer("balance")->default(0);
             $table->timestamps();
         });
     }

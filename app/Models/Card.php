@@ -22,6 +22,7 @@ class Card extends Model
         'active',
         'visibility',
         'balance',
+        'user_id',
     ];
 
     public function user()

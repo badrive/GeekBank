@@ -16,6 +16,20 @@
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
 
+        <!-- Phone Number -->
+        <div class="mt-4">
+            <x-input-label for="phone" :value="__('Phone')" />
+            <x-text-input id="phone" class="block mt-1 w-full" type="text" name="phone" :value="old('phone')" required autofocus autocomplete="username" />
+            <x-input-error :messages="$errors->get('name')" class="mt-2" />
+        </div>
+
+        <!-- City -->
+        <div class="mt-4">
+            <x-input-label for="city" :value="__('City')" />
+            <x-text-input id="city" class="block mt-1 w-full" type="text" name="city" :value="old('city')" required autofocus autocomplete="username" />
+            <x-input-error :messages="$errors->get('name')" class="mt-2" />
+        </div>
+
         <!-- Password -->
         <div class="mt-4">
             <x-input-label for="password" :value="__('Password')" />
@@ -37,6 +51,14 @@
                             name="password_confirmation" required autocomplete="new-password" />
 
             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
+        </div>
+
+        <!-- Gender -->
+        <div class="mt-4 flex justify-around">
+            <x-input-label for="male">Male</x-input-label>
+            <input value="male" type="radio" name="gender" id="male">
+            <x-input-label for="female">Female</x-input-label>
+            <input value="female" type="radio" name="gender" id="female">
         </div>
 
         <div class="flex items-center justify-end mt-4">
