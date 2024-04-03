@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId("user_id")->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->string("number");
             $table->string("code");
-            $table->timestamp("date");
+            $table->date("date");
             $table->string("rib");
             $table->boolean("active")->default(true);
             $table->boolean("visibility")->default(true);
