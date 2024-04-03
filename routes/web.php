@@ -9,7 +9,11 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    $balance = 0;
+    auth()->user()->cards->each(function ($item) use (&$balance) {
+        $balance += $item['balance'];
+      });
+    return view('dashboard', compact("balance"));
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 //bills

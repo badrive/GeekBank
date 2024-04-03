@@ -46,7 +46,7 @@
             </x-nav-link>
         </div>
 
-        <div class="">
+        {{-- <div class="">
             <x-nav-link :href="route('cards')" :active="request()->routeIs('cards')">
                 <div style="display: flex; gap: 5px;" class="flex flex-col items-center">
                     <svg stroke-opacity="{{ request()->routeIs('cards') ? 1 : 0.5 }}" width="30px" height="30px"
@@ -68,7 +68,7 @@
                     {{ __('Cards') }}
                 </div>
             </x-nav-link>
-        </div>
+        </div> --}}
 
         <div class="">
             <x-nav-link :href="route('transition')" :active="request()->routeIs('transition')">
