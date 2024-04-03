@@ -54,6 +54,20 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Card::class);
     }
 
+    public function active_cards()
+    {
+        return $this->hasMany(Card::class)->where('visibility', 1);
+    }
+
+    public function balance()
+    {
+        $balance = 0;
+        $this->active_cards->each(function ($item) use (&$balance) {
+            $balance += $item['balance'];
+          });
+        return $balance;
+    }
+
     public function create_card($balance = 0)
     {
 
