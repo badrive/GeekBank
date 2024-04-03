@@ -27,10 +27,17 @@ Route::get('/invest', function () {
     return view('invest');
 })->middleware(['auth', 'verified'])->name('invest');
 
+// transition
 Route::get('/transition', function () {
     return view('transition');
 })->middleware(['auth', 'verified'])->name('transition');
 
+// loans
+Route::get('/loans', function () {
+    return view('loans');
+})->middleware(['auth', 'verified'])->name('loans');
+
+// cards
 Route::middleware(['auth', 'verified'])->group(function () {
     // cards
     Route::get('/cards', [cardController::class, 'index'])->name('cards');
