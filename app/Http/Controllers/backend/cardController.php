@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\backend;
 
 use App\Http\Controllers\Controller;
+use App\Models\Card;
 use Illuminate\Http\Request;
 
 class cardController extends Controller
@@ -28,7 +29,13 @@ class cardController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $user = $request->user();
+
+        if ($user->cards->where('visibility', '==', '1')->count() < 2) {
+            $user->create_card();
+        }
+
+        return back();
     }
 
     /**
@@ -58,8 +65,13 @@ class cardController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Card $card)
     {
-        //
+        // $card->delete();
+        $card->update([
+            "visibility" => false,
+        ]);
+
+        return back();
     }
 }
