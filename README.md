@@ -57,3 +57,214 @@ frontend
 backend
     userController
     cardController
+
+
+
+
+<!-- * transfer blade -->
+
+"
+@extends('layouts.index')
+
+@section('content')
+    <form method="POST" action="{{ route('logout') }}">
+        @csrf
+
+        <x-dropdown-link :href="route('logout')"
+            onclick="event.preventDefault();
+                        this.closest('form').submit();">
+            {{ __('Log Out') }}
+        </x-dropdown-link>
+    </form>
+
+    <h1>send money </h1>
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    @if (session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
+    <form action="{{ route('salam') }}" method="post">
+        @csrf
+        @method('PUT')
+        <input type="text" name="rib" id="" placeholder="enter rib">
+        <input type="number" name="amount" id="" placeholder="enter amount">
+        <select name="card_id" id="">
+            @foreach ($connectedUserCards as $connectedUserCard)
+                <option value="{{ $connectedUserCard->id }}">card{{ $connectedUserCard->id }}</option>
+            @endforeach
+        </select>
+        <button type="submit">send</button>
+    </form>
+@endsection
+"
+
+<!-- & Services blade -->
+
+"
+@extends('layouts.index')
+
+@section('content')
+    <form method="POST" action="{{ route('logout') }}">
+        @csrf
+
+        <x-dropdown-link :href="route('logout')"
+            onclick="event.preventDefault();
+                    this.closest('form').submit();">
+            {{ __('Log Out') }}
+        </x-dropdown-link>
+    </form>
+
+    <h1 class="text-[30px]">Pay Bills</h1>
+
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    @if (session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
+
+    @foreach ($bills as $bill)
+        <div class="flex gap-5 text-[23px] items-center">
+            <p>{{ $bill->name }}</p>
+            <p>{{ $bill->amount }}</p>
+            <p>{{ $bill->paid ? 'Paid' : 'Not Paid' }}</p>
+            <form action="{{ route("pay_pills",$bill) }}" class="flex gap-4" method="post">
+                @csrf
+                @method("PUT")
+                <select name="card_id" id="">
+                    @foreach ($connectedUserCards as $connectedUserCard)
+                        <option value="{{ $connectedUserCard->id }}">Card{{ $connectedUserCard->id }}</option>
+                    @endforeach
+                </select>
+                <button class="{{ $bill->paid ? 'hidden' : 'flex' }} w-[100px] h-[28px] rounded bg-green-600 items-center justify-center" type="submit">Pay</button>
+            </form>
+        </div>
+    @endforeach
+@endsection
+
+"
+
+
+<!-- ! Transfer Function -->
+
+
+<!--~ Route::put("/send",[HomeController::class,"transfer"])->name("salam"); -->
+
+"
+    public function index()
+    {
+        $connectedUser = User::where("id", auth()->user()->id)->first();
+        $connectedUserCards = $connectedUser->cards;
+        return view("home.home", compact('connectedUserCards'));
+    }
+
+    public function transfer(Request $request)
+    {
+        
+        // $rib = Card::first();
+        // dd($rib->rib);
+        request()->validate(
+            [
+                'rib' => 'required', // Add more validation rules as needed for other fields
+                'card_id' => 'required',
+                'amount' => 'required|numeric|min:0', // Assuming amount should be numeric and greater than or equal to 0
+            ],
+            [
+                'rib.required' => 'The recipient card number is required.',
+                'card_id.required' => 'Your card ID is required.',
+                'amount.required' => 'The amount is required.',
+                'amount.min' => 'The amount must be a positive number.',
+            ]
+        );
+
+        $cardTosend = Card::where("rib", $request->rib)->first();
+        $connectedUserCard = Card::where("id", $request->card_id)->first();
+
+        if ($connectedUserCard && $connectedUserCard->balance >= $request->amount) {
+            $newBalanceTosend = $cardTosend->balance + $request->amount;
+            $newBalanceUser = $connectedUserCard->balance - $request->amount;
+
+            $cardTosend->balance = $newBalanceTosend;
+            $connectedUserCard->balance = $newBalanceUser;
+
+            $cardTosend->save();
+            $connectedUserCard->save();
+            Transaction::create([
+                "card_id" => $request->card_id,
+                "moment" => Carbon::now(),
+                "indicator" => false,
+                "amount" => $request->amount
+            ]);
+            Transaction::create([
+                "card_id" => $cardTosend->id,
+                "moment" => Carbon::now(),
+                "indicator" => true,
+                "amount" => $request->amount
+            ]);
+            return back()->with('success', 'Transfer successful!');
+        }
+        else {
+            // Return with an error message if the balance is insufficient
+            $error = 'Insufficient balance or invalid card details.';
+            if ($connectedUserCard && $connectedUserCard->balance < $request->amount) {
+                $error = 'Insufficient balance for the transfer.';
+            }
+            return back()->with('error', $error);
+        }
+    }
+"
+
+
+<!-- ^ services function -->
+
+"
+    public function index()
+    {
+        $connectedUser = User::where("id", auth()->user()->id)->first();
+        $connectedUserCards = $connectedUser->cards;
+        $bills = Bill::all();
+        return view("home.home",compact("connectedUser","connectedUserCards","bills"));
+    }
+
+    public function pay_pills(Request $request , Bill $bill)
+    {
+        $connectedUser = User::where("id", auth()->user()->id)->first();
+        $connectedUserCard = Card::where("id", $request->card_id)->first();
+
+        if ($connectedUserCard && $connectedUserCard->balance >= $request->amount) {
+            $newSold = $connectedUserCard->balance - $bill->amount;
+            $connectedUserCard->balance = $newSold;
+            $connectedUserCard->save();
+
+            $bill->paid = true ; 
+            $bill->save();
+
+            Transaction::create([
+                "card_id" => $request->card_id,
+                "moment" => Carbon::now(),
+                "indicator" => false,
+                "amount" => $bill->amount
+            ]);
+            return back()->with('success', 'Transfer successful!');
+        }
+        else {
+            // Return with an error message if the balance is insufficient
+            $error = 'Insufficient balance or invalid card details.';
+            if ($connectedUserCard && $connectedUserCard->balance < $request->amount) {
+                $error = 'Insufficient balance for the transfer.';
+            }
+            return back()->with('error', $error);
+        }
+    }
+"

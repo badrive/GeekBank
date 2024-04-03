@@ -15,6 +15,7 @@ class Bill extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        "name",
         'amount',
         'paid',
     ];

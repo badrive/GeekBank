@@ -15,8 +15,10 @@ class Transaction extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        "card_id",
         'moment',
         'indicator',
+        'amount'
     ];
 
     public function card()
