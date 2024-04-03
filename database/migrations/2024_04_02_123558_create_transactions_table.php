@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId("card_id")->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->timestamp("moment");
+            $table->integer("amount");
             $table->boolean("indicator");
             $table->timestamps();
         });
