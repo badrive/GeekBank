@@ -27,15 +27,13 @@ Route::get('/invest', function () {
     return view('invest');
 })->middleware(['auth', 'verified'])->name('invest');
 
-Route::get('/cards', function () {
-    return view('cards');
-})->middleware(['auth', 'verified'])->name('cards');
-
 Route::get('/transition', function () {
     return view('transition');
 })->middleware(['auth', 'verified'])->name('transition');
 
 Route::middleware(['auth', 'verified'])->group(function () {
+    // cards
+    Route::get('/cards', [cardController::class, 'index'])->name('cards');
     Route::post('/cards/store', [cardController::class, 'store'])->name('card.store');
     Route::delete('/cards/destroy/{card}', [cardController::class, 'destroy'])->name('card.destroy');
 });

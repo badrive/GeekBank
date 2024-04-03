@@ -1,42 +1,51 @@
 <x-app-layout>
-    <header class="bg-white dark:bg-gray-800 shadow">
-        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 flex justify-between">
-            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Cards</h2>
-            @if (Auth::user()->cards->where('visibility', '==', '1')->count() < 2)
-                <button type="button" onclick="addCardModal.show()"
-                    class="inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">Add
-                    card
-                </button>
-                <dialog id="addCardModal">
-                    <div class="w-screen h-screen fixed inset-0 bg-black/50 grid place-items-center text-white z-10">
-                        <div class="w-[25%] relative bg-gray-800 pb-24 px-6 pt-8 rounded">
-                            <form action="{{ route('card.store') }}" method="POST">
-                                @csrf
-                                <p class="block font-medium text-lg text-gray-700 dark:text-gray-300" for="email">
-                                    Are sure you want to request new Card!
-                                </p>
-                                <x-primary-button class="absolute right-6 bottom-7 mt-5">
-                                    {{ __('Confirm') }}
-                                </x-primary-button>
-                            </form>
-                            <form method="dialog" class="absolute left-6 bottom-7 mt-5">
-                                <x-danger-button>{{ __('Cancel') }}</x-danger-button>
-                            </form>
-                        </div>
-                    </div>
-                </dialog>
-            @endif
-        </div>
-    </header>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+            {{ __('Cards') }}
+        </h2>
+    </x-slot>
 
-    <div class="py-12">
+
+    <div class="py-8">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100 flex gap-4 flex-wrap">
+                <div class="p-6 text-gray-900 dark:text-gray-100 flex gap-8 flex-wrap justify-">
+                    @if (Auth::user()->cards->where('visibility', '==', '1')->count() < 2)
+                        <button type="button" onclick="addCardModal.show()"
+                            class="inline-flex flex-col justify-center items-center px-4 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
+                            <svg class="dark:text-gray-800 text-gray-200 mb-4" width="24" height="24"
+                                fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                                <path
+                                    d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" />
+                            </svg>
+                            <span>Add</span>
+                            <span>card</span>
+                        </button>
+                        <dialog id="addCardModal">
+                            <div
+                                class="w-screen h-screen fixed inset-0 bg-black/50 grid place-items-center text-white z-10">
+                                <div class="w-[25%] relative bg-gray-800 pb-24 px-6 pt-8 rounded">
+                                    <form action="{{ route('card.store') }}" method="POST">
+                                        @csrf
+                                        <p class="block font-medium text-lg text-gray-700 dark:text-gray-300"
+                                            for="email">
+                                            Are sure you want to request new Card!
+                                        </p>
+                                        <x-primary-button class="absolute right-6 bottom-7 mt-5">
+                                            {{ __('Confirm') }}
+                                        </x-primary-button>
+                                    </form>
+                                    <form method="dialog" class="absolute left-6 bottom-7 mt-5">
+                                        <x-danger-button>{{ __('Cancel') }}</x-danger-button>
+                                    </form>
+                                </div>
+                            </div>
+                        </dialog>
+                    @endif
 
                     @foreach (Auth::user()->cards as $card)
                         @if ($card->visibility)
-                            <div class="bg-blue-500 p-7 rounded-2xl text-white flex flex-col gap-6 group/card">
+                            <div class="bg-blue-500 px-9 py-7 rounded-2xl text-white flex flex-col gap-6 group/card">
                                 <div class="flex items-center justify-between">
                                     <svg width="37" height="36" viewBox="0 0 37 36" fill="none"
                                         xmlns="http://www.w3.org/2000/svg">

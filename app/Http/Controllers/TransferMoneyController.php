@@ -4,24 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Card;
 use App\Models\Transaction;
-use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class TransferMoneyController extends Controller
 {
-    // public function index()
-    // {
-    //     $connectedUser = User::where("id", auth()->user()->id)->first();
-    //     $connectedUserCards = $connectedUser->cards;
-    //     return view("home.home", compact('connectedUserCards'));
-    // }
-
     public function transfer(Request $request)
     {
-        
-        // $rib = Card::first();
-        // dd($rib->rib);
         request()->validate(
             [
                 'rib' => 'required', // Add more validation rules as needed for other fields
