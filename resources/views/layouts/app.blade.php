@@ -19,7 +19,7 @@
             @include('layouts.navigation')
 
             <!-- Page Heading -->
-            <div style="margin-left: 158px" class="flex flex-col w-full ">
+            <div style="margin-left: 12vw; " class="flex flex-col w-full ">
                 @if (isset($header))
                     <header style="padding: 10px; " class="bg-white dark:bg-gray-800 shadow flex items-center">
 
