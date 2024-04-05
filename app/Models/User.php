@@ -5,6 +5,7 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -54,6 +55,14 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Card::class);
     }
 
+    /**
+     * Get all of the investments for the user.
+     */
+    public function transactions(): HasManyThrough
+    {
+        return $this->hasManyThrough(Transaction::class, Card::class);
+    }
+
     public function active_cards()
     {
         return $this->hasMany(Card::class)->where('visibility', 1);
@@ -64,11 +73,20 @@ class User extends Authenticatable implements MustVerifyEmail
         $balance = 0;
         $this->active_cards->each(function ($item) use (&$balance) {
             $balance += $item['balance'];
-          });
+        });
         return $balance;
     }
 
-    public function create_card($balance = 0)
+    public function create_bill($name, $amount)
+    {
+        Bill::create([
+            "user_id" => $this->id,
+            "name" => $name,
+            "amount" => $amount,
+        ]);
+    }
+
+    public function create_card(int $balance = 0)
     {
 
         $card_number = random_int(10 ** 15, (10 ** 16) - 1) . '';

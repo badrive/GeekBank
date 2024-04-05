@@ -15,13 +15,20 @@ class Investment extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        'card_id',
         'amount',
         'profit',
         'paid',
+        'type',
     ];
 
-    public function transaction()
+    public function transactions()
     {
-        return $this->belongsTo(Transaction::class);
+        return $this->morphToMany(Transaction::class, 'transactionable');
+    }
+
+    public function card()
+    {
+        return $this->belongsTo(Card::class);
     }
 }

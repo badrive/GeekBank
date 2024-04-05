@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\backend\cardController;
+use App\Http\Controllers\backend\investmentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TransferMoneyController;
 use App\Models\User;
@@ -13,7 +14,16 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    $income = 0;
+    $expense = 0;
+    foreach (auth()->user()->transactions as $transaction) {
+        if ($transaction->indicator == "+") {
+            $income += $transaction->amount;
+        } else {
+            $expense += $transaction->amount;
+        }
+    }
+    return view('dashboard', compact("income", "expense"));
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 //bills
@@ -43,11 +53,6 @@ Route::get('/crypto', function () {
         return view("crypto", compact('cryptos', 'user'));
 })->middleware(['auth', 'verified'])->name('crypto');
 
-//invest
-Route::get('/invest', function () {
-    return view('invest');
-})->middleware(['auth', 'verified'])->name('invest');
-
 // transition
 Route::get('/transition', function () {
 
@@ -70,6 +75,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/cards', [cardController::class, 'index'])->name('cards');
     Route::post('/cards/store', [cardController::class, 'store'])->name('card.store');
     Route::delete('/cards/destroy/{card}', [cardController::class, 'destroy'])->name('card.destroy');
+
+    // investments
+    Route::get('/investments', [investmentController::class, 'index'])->name('investments');
+    Route::post('/investments/store', [investmentController::class, 'store'])->name('investments.store');
 });
 
 Route::middleware('auth')->group(function () {

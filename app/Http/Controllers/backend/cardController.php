@@ -67,7 +67,6 @@ class cardController extends Controller
      */
     public function destroy(Card $card)
     {
-        // $card->delete();
         $card->update([
             "visibility" => false,
         ]);

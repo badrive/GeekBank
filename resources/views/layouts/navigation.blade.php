@@ -137,9 +137,9 @@
         </div>
 
         <div class="">
-            <x-nav-link :href="route('invest')" :active="request()->routeIs('invest')">
+            <x-nav-link :href="route('investments')" :active="request()->routeIs('investments')">
                 <div style="display: flex; gap: 5px;" class="flex flex-col items-center">
-                    <svg stroke-opacity="{{ request()->routeIs('invest') ? 1 : 0.5 }}" fill="none" width="40px"
+                    <svg stroke-opacity="{{ request()->routeIs('investments') ? 1 : 0.5 }}" fill="none" width="40px"
                         height="40px" viewBox="0 0 24 24" id="up-trend-round" data-name="Flat Line"
                         xmlns="http://www.w3.org/2000/svg" class="icon flat-line">
                         <path id="primary" d="M21,7l-6.79,6.79a1,1,0,0,1-1.42,0l-2.58-2.58a1,1,0,0,0-1.42,0L3,17"

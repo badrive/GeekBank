@@ -11,11 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('transactions', function (Blueprint $table) {
+        Schema::create('transactionables', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("card_id")->constrained()->cascadeOnDelete()->cascadeOnUpdate();
-            $table->integer("amount");
-            $table->boolean("indicator");
+            $table->foreignId('transaction_id')->constrained();
+            $table->morphs('transactionable');
             $table->timestamps();
         });
     }
@@ -25,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('transactions');
+        Schema::dropIfExists('transactionables');
     }
 };

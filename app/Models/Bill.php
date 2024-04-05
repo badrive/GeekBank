@@ -18,6 +18,7 @@ class Bill extends Model
         "name",
         'amount',
         'paid',
+        'user_id',
     ];
 
     public function transaction()
