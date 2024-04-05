@@ -1,9 +1,12 @@
 <?php
 
 use App\Http\Controllers\backend\cardController;
+use App\Http\Controllers\BillsController;
+use App\Http\Controllers\LoanController;
 use App\Http\Controllers\backend\investmentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TransferMoneyController;
+use App\Models\Bill;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
@@ -28,8 +31,13 @@ Route::get('/dashboard', function () {
 
 //bills
 Route::get('/bills', function () {
-    return view('bills');
+    $connectedUser = User::where("id", auth()->user()->id)->first();
+        $connectedUserCards = $connectedUser->cards;
+        $bills = Bill::all();
+        return view("bills",compact("connectedUser","connectedUserCards","bills"));
 })->middleware(['auth', 'verified'])->name('bills');
+
+Route::put('/payBills/{bill}',[BillsController::class,"pay_pills"])->name("pay_pills");
 
 //crypto
 Route::get('/crypto', function () {
@@ -51,14 +59,13 @@ Route::get('/crypto', function () {
 })->middleware(['auth', 'verified'])->name('crypto');
 
 // transition
+
 Route::get('/transition', function () {
     return view('transition');
 })->middleware(['auth', 'verified'])->name('transition');
 
 // loans
-Route::get('/loans', function () {
-    return view('loans');
-})->middleware(['auth', 'verified'])->name('loans');
+Route::get('/loans',[LoanController::class,"index"])->middleware(['auth', 'verified'])->name('loans');
 
 // loans
 Route::put('/transactions/send', [TransferMoneyController::class,"transfer"])->middleware(['auth', 'verified'])->name('transfer');
@@ -80,5 +87,9 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+Route::get("/home",[LoanController::class,"index"]);
+
+Route::put("/home/loan",[LoanController::class,"take_loan"])->name("take_loan");
 
 require __DIR__ . '/auth.php';

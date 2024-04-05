@@ -20,8 +20,8 @@ class Loan extends Model
         'paid',
     ];
 
-    public function transaction()
-    {
-        return $this->belongsTo(Transaction::class);
-    }
+    // public function transaction()
+    // {
+    //     return $this->belongsTo(Transaction::class);
+    // }
 }
