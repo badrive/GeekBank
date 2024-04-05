@@ -19,6 +19,7 @@ return new class extends Migration {
             $table->string('city');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->boolean('loan')->default(false);
             $table->rememberToken();
             $table->timestamps();
         });

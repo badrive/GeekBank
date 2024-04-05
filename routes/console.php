@@ -1,7 +1,10 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Foundation\Inspiring;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Schedule;
 
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
@@ -15,3 +18,13 @@ Artisan::command('card', function () {
     $spacedString = implode(" ", str_split($string, 4)); // Output: 1234 5678 90
     dd($spacedString);
 });
+
+
+// Schedule::call(
+//     function () {
+//         request()->validate([
+//             "amount"=>"required | min:1 "
+//         ]);
+//         $connectedUser = User::where("id", auth()->user()->id)->first();
+//     }
+// )->weekly()->mondays()->at("08:00");
