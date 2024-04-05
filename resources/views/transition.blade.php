@@ -9,48 +9,55 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
-                    
-
-                    {{-- content --}}
-
-                    <div class="">
-                        <h1 class="p-3">Send money </h1>
-                        @if (session('success'))
-                            <div class="alert alert-success">
-                                {{ session('success') }}
-                            </div>
-                        @endif
-                
+                    <div class="flex gap-6 items-center">
+                        <div class=" text-gray-900 dark:text-gray-100 text-lg">
+                            {{ __('Transfer Money') }}
+                        </div>
                         @if (session('error'))
-                            <div class="alert alert-danger">
-                                {{ session('error') }}
+                            <div class="text-red-500">
+                                {{ __(session('error')) }}
                             </div>
                         @endif
-                        <form class="flex flex-row gap-3" action="{{ route('transfer') }}" method="post">
-                            @csrf
-                            @method('PUT')
-                            <input class="rounded-lg bg-transparent" type="text" name="rib" id="" placeholder="enter rib">
-                            <input class="rounded-lg bg-transparent" type="number" name="amount" id="" placeholder="enter amount">
-                            <select class="rounded-lg bg-transparent" name="card_id" id="">
-                                @foreach ($connectedUserCards as $connectedUserCard)
-                                    <option class="text-black" value="{{ $connectedUserCard->id }}">card{{ $connectedUserCard->id }}</option>
-                                @endforeach
-                            </select>
-                            <button class="p-2 rounded-lg bg-white hover:bg-slate-200 text-gray-800" type="submit">send</button>
-                        </form>
-                
+                        @if (session('succsess'))
+                            <div class="text-green-500">
+                                {{ __(session('succsess')) }}
+                            </div>
+                        @endif
                     </div>
 
-                    {{-- end --}}
+                    <form action="{{ route('transfer') }}" method="post" class="flex gap-6 items-end mt-4">
+                        @csrf
+                        @method('PUT')
+                        <div class="flex-1">
+                            <x-input-label>{{ __('From') }}</x-input-label>
+                            <select name="card_id" id="card_id"
+                                class="bg-gray-900 rounded text-gray-900 dark:text-gray-100 mt-1 w-full">
+                                @foreach (Auth::user()->active_cards as $card)
+                                    <option class="text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800"
+                                        value="{{ $card->id }}">{{ implode(' ', str_split($card->number, 4)) }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
 
+                        <div class="flex-1">
+                            <x-input-label>{{ __('To') }}</x-input-label>
+                            <x-text-input id="rib" class="block mt-1 bg-transparent w-full" type="number"
+                                name="rib" required />
+                        </div>
 
+                        <div class="flex-1">
+                            <x-input-label>{{ __('Amount') }}</x-input-label>
+                            <x-text-input id="amount" class="block mt-1 bg-transparent w-full" type="number"
+                                name="amount" required />
+                        </div>
+
+                        <div>
+                            <x-primary-button>{{ __('Send') }}</x-primary-button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
-
- 
-
-    
-
 </x-app-layout>
