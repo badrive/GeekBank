@@ -5,9 +5,6 @@ namespace App\Http\Controllers\backend;
 use App\Http\Controllers\Controller;
 use App\Models\Bill;
 use App\Models\Card;
-use App\Models\Transaction;
-use App\Models\User;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class billController extends Controller

@@ -5,7 +5,58 @@
         </h2>
     </x-slot>
 
-    <div class="py-12">
+    <div class="py-12 ">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div
+                class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6 text-gray-900 dark:text-gray-100">
+                <div class="flex gap-6 items-center">
+                    <div class=" text-gray-900 dark:text-gray-100 text-lg">
+                        {{ __('Take Loan') }}
+                    </div>
+                    @if (session('error'))
+                        <div class="text-red-500">
+                            {{ __(session('error')) }}
+                        </div>
+                    @endif
+                    @if (session('success'))
+                        <div class="text-green-500">
+                            {{ __(session('success')) }}
+                        </div>
+                    @endif
+                </div>
+
+                <form action="{{ route('take_loan') }}" method="post"
+                    class="flex gap-6 items-end mt-4 {{ $isHavingLoan ? 'hidden' : 'flex' }}">
+                    @csrf
+                    @method('PUT')
+                    <div class="flex-1">
+                        <x-input-label>{{ __('Card') }}</x-input-label>
+                        <select name="card_id" id="card_id"
+                            class="bg-gray-900 rounded text-gray-900 dark:text-gray-100 mt-1 w-full">
+                            @foreach (Auth::user()->active_cards as $card)
+                                <option class="text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800"
+                                    value="{{ $card->id }}">{{ implode(' ', str_split($card->number, 4)) }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="flex-1">
+                        <x-input-label>{{ __('Amount') }}</x-input-label>
+                        <x-text-input id="amount" class="block mt-1 bg-transparent w-full" type="number"
+                            name="amount" required />
+                    </div>
+
+                    <div>
+                        <x-primary-button>{{ __('get') }}</x-primary-button>
+                    </div>
+                </form>
+            </div>
+
+
+        </div>
+    </div>
+    {{-- <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
@@ -47,7 +98,6 @@
                 </div>
             </div>
         </div>
-    </div>
-
+    </div> --}}
 
 </x-app-layout>
