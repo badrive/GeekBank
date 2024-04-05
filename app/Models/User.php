@@ -56,6 +56,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Card::class);
     }
 
+    public function bills()
+    {
+        return $this->hasMany(Bill::class);
+    }
+
     /**
      * Get all of the investments for the user.
      */
