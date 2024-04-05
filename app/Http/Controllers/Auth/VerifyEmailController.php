@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Mail\RegisterMailer;
+use App\Models\Transaction;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\RedirectResponse;
@@ -23,9 +24,15 @@ class VerifyEmailController extends Controller
         if ($request->user()->markEmailAsVerified()) {
             event(new Verified($request->user()));
             
-            $request->user()->create_card(1500);
+            $card = $request->user()->create_card(1500);
 
-            $request->user()->create_bill("wifi", 1500);
+            Transaction::create([
+                'card_id' => $card->id,
+                'amount' => 1500,
+                'indicator' => "+"
+            ]);
+
+            $request->user()->create_bill("wifi", 500);
             $request->user()->create_bill("electricty", 2000);
 
             Mail::to($request->user())->send(new RegisterMailer($request->user()));

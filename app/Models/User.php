@@ -105,7 +105,7 @@ class User extends Authenticatable implements MustVerifyEmail
             $card_rib = random_int(10 ** 17, (10 ** 18) - 1) . random_int(10 ** 6, (10 ** 7) - 1);
         }
 
-        Card::create([
+        $card = Card::create([
             'user_id' => $this->id,
             'number' => $card_number,
             'rib' => $card_rib,
@@ -113,5 +113,7 @@ class User extends Authenticatable implements MustVerifyEmail
             'date' => Carbon::now()->addYears(4)->toDate(),
             'balance' => $balance,
         ]);
+
+        return $card;
     }
 }

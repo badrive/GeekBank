@@ -34,6 +34,6 @@ class billController extends Controller
             "indicator" => "-"
         ]);
 
-        return back()->with('success', 'Bill ' . $bill->name . 'paid successfully!');
+        return back()->with('success', 'Bill ' . $bill->name . ' paid successfully!');
     }
 }
